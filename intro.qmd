@@ -1,0 +1,138 @@
+```{=html}
+<style>
+  body{text-align: justify}
+</style>
+```
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+
+# **Origem da Linguagem R**
+## **Histórico**
+
+A história da Linguagem de Programação chamada ***R***, se inicia com **John Chambers**, em 1976, quando nos laboratórios da **Bells Labs** desenvolvel a Linguagem S, que mais tarde, se torna a base computacional para a linguagem R.
+
+![Criador da Linguagem S](john_chambers1.jpg){fig-align="center" width="206"}
+
+Criada pelos professores **Ross Ihaka** e **Robert Gentleman** do Departamento de Estatística da Universidade de Auchland, na Nova Zelândia, em 1966. Sentiram-se incomodados com o fato de que a maioria dos seus alunos não tinham acesso a grande parte de softwares disponíveis na época, pois eram pagos. 
+
+
+![Criadores da Linguagem R](autores_R.jpg){fig-align="center" width="432"}
+
+
+Para resolver esse problema, eles criaram a linguagem R, em 1993, baseando-se nas idéias da linguagem S. O nome da linguagem R é devido às iniciais de seus  idealizadores, Ross e Robert, mas foi somente em 1995 que eles resolveram  autorizar a distribuição do R sobre uma licença livre.
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+## **Ranking das Linguagens de Programação**
+### **Ranking Geral**
+
+
+```{r}
+#| message: false
+#| warning: false
+
+library(ggplot2)
+library(plotly)
+
+# Dados fornecidos
+linguagens <- c("Javascript", "HTML/CSS", "PYTHON", "R", "JAVA", "SQL", "TypScript", "C#", "C++", "C", "PHP")
+percentual <- c(63.61, 52.97, 49.3, 48.6, 38.87, 35.35, 30.2, 27.62, 22.42, 19.34, 18.58)
+
+# Criando o dataframe
+df <- data.frame(Linguagem = linguagens, Percentual = percentual)
+
+# Ordenando os dados
+df <- df[order(df$Percentual, decreasing = TRUE), ]
+
+
+# Criando o gráfico rotacionado com ggplot2
+Grafico1 <- ggplot(df, aes(x = Percentual, y = reorder(Linguagem, Percentual))) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  geom_text(aes(label = paste0(Percentual, "%")), hjust = -0.2, size = 3.5) +
+  labs(x = "%", 
+       y = "Linguagens de Programação", 
+       title = "Ranking Geral - 2025") +
+  theme_minimal()
+
+# Convertendo para um gráfico interativo com plotly
+ggplotly(Grafico1)
+
+```
+
+
+
+### **Ranking Análise de Dados**
+
+
+```{r}
+#| message: false
+#| warning: false
+
+# Carregar os pacotes
+library(ggplot2)
+library(plotly)
+
+# Dados fornecidos
+linguagens <- c("PYTHON",
+                "R", 
+                "SQL",
+                "JAVA",
+                "C/C++",
+                "Javascript",
+                "Julia")
+percentual <- c(75.25, 
+                62.73, 
+                55.4, 
+                52.2, 
+                48.87, 
+                36.50, 
+                30.2)
+
+# Criando o dataframe
+df <- data.frame(Linguagem = linguagens, Percentual = percentual)
+
+# Ordenando os dados
+df <- df[order(df$Percentual, decreasing = TRUE), ]
+
+# Criando o gráfico rotacionado com ggplot2
+Grafico2 <- ggplot(df, aes(x = Percentual, y = reorder(Linguagem, Percentual))) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  geom_text(aes(label = paste0(Percentual, "%")), hjust = -0.2, size = 3.5) +
+  labs(x = "%", 
+       y = "Linguagens de Programação", 
+       title = "Ranking para Análise de Dados - 2025") +
+  theme_minimal()
+
+# Convertendo para um gráfico interativo com plotly
+ggplotly(Grafico2)
+
+```
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+
+
+
+
+
+
+
+
+
+
