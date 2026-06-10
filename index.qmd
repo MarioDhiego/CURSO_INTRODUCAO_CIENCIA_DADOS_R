@@ -33,7 +33,7 @@ Este livro foi escrito com objetivo de permitir que estudantes e pesquisadores e
 
 Este trabalho está licenciado sob a Licença Internacional Creative Commons Attribution-ShareAlike 4.0. Para visualizar uma cópia desta licença, visite \<http://creativecommons.org/licenses/by-sa/4.0/\> ou envie uma carta para Creative Commons, PO Box 1866, Mountain View, CA 94042, EUA.
 
-![License: CC BY-SA 4.0](https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-sa.png){width="25%" fig-align="left"}
+
 
 
 

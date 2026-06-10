@@ -10,7 +10,6 @@
 ::::
 
 # **Visualização da Informação**
-
 ## Dataset mtcars
 
 -   O conjunto de dados, denominado de *mtcars*, foi obtido a partir das edições de março, abril, junho e julho de 1974 da revista *Motor Trend* para um estudo realizado por Hocking (1976) e posteriormente, reportado por Henderson e Velleman (1981).
@@ -626,6 +625,8 @@ grid.arrange(ffig2, ffig3, ffig4, ffig5, ffig6, ffig7, ffig8,
              ncol = 3, 
              nrow = 3)
 ```
+
+
 
 :::: progress
 ::: {.progress-bar style="width: 100%;"}

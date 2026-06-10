@@ -1,6 +1,6 @@
 ```{=html}
 <style>
-  body{text-align: justify}
+body{text-align: justify}
 </style>
 ```
 
@@ -65,27 +65,27 @@ Até aqui utilizamos o que chamamos de Base R, ou seja, sintaxe e funções bás
 
 -   
 
-    1)  statts
+1)  statts
 
 -   
 
-    2)  graphics
+2)  graphics
 
 -   
 
-    3)  grDevices
+3)  grDevices
 
 -   
 
-    4)  utils
+4)  utils
 
 -   
 
-    5)  dataset
+5)  dataset
 
 -   
 
-    6)  methods
+6)  methods
 
 Para ver os pacotes carregados por padrão no R, use o comando seguinte:
 
@@ -104,15 +104,15 @@ getOption("defaultPackages")
 
 -   
 
-    1)  base : funcoes básicas e preinstaladas e carregadas;
+1)  base : funcoes básicas e preinstaladas e carregadas;
 
 -   
 
-    2)  recommended : funcoes instaladas mas nao carregadas, Necessário usar o comando *libray()*;
+2)  recommended : funcoes instaladas mas nao carregadas, Necessário usar o comando *libray()*;
 
 -   
 
-    3)  contributed : pacotes que nao são instalados automaticamente usa o comando *install.package()*;
+3)  contributed : pacotes que nao são instalados automaticamente usa o comando *install.package()*;
 
 :::: progress
 ::: {.progress-bar style="width: 100%;"}
@@ -300,47 +300,47 @@ As principais funções do **dplyr** são:
 
 -   
 
-    1)  select() : extrai colunas de uma tabela na forma de tabela
+1)  select() : extrai colunas de uma tabela na forma de tabela
 
 -   
 
-    2)  pull() : extrai uma coluna de uma tabela na forma de vetor
+2)  pull() : extrai uma coluna de uma tabela na forma de vetor
 
 -   
 
-    3)  filter() : filtra linhas
+3)  filter() : filtra linhas
 
 -   
 
-    4)  distinct() : remove as linhas com valores repetidos
+4)  distinct() : remove as linhas com valores repetidos
 
 -   
 
-    5)  arrange() : reordena ou combina linhas
+5)  arrange() : reordena ou combina linhas
 
 -   
 
-    6)  mutate() : cria/modifica novas colunas no banco original
+6)  mutate() : cria/modifica novas colunas no banco original
 
 -   
 
-    7)  summarize() : sumariza valores
+7)  summarize() : sumariza valores
 
 -   
 
-    8)  group_by() : operações por grupos
+8)  group_by() : operações por grupos
 
 -   
 
-    9)  add_column() : adiciona novas colunas
+9)  add_column() : adiciona novas colunas
 
 -   
 
-    10) add_row() : adiciona novas linhas
+10) add_row() : adiciona novas linhas
 
 -   
 
-    11) rename() : renomeia uma coluna
+11) rename() : renomeia uma coluna
 
 As principais vantagens de se usar o dplyr em detrimento das funções do R base são:
 
@@ -366,7 +366,7 @@ library(dplyr)
 
 Vendas_A %>%
   dplyr:: select(filial, quinzena, valor_compra) 
-  
+
 
 Vendas_B %>%
   dplyr:: select(quinzena, filial, n_itens) 
@@ -381,7 +381,9 @@ Vendas_B %>%
 
 Para filtrar valores de uma coluna da base, utilizamos a função filter().
 
-```{r dplyr1b, message=FALSE, warning=FALSE}
+```{r dplyr1b}
+#| message: false
+#| warning: false
 
 library(dplyr)
 
@@ -426,10 +428,12 @@ Vendas_A %>%
   head()
 ```
 
+
 :::: progress
 ::: {.progress-bar style="width: 100%;"}
 :::
 ::::
+
 
 #### Função **mutate()**
 
@@ -475,7 +479,7 @@ Vendas_A %>%
 Vendas_A %>%
   dplyr:: select(filial) %>%
   dplyr:: summarise(filial_distintas = n_distinct(filial)) 
-  
+
 # numero de cupons distinto da filial B
 Vendas_A %>%
   dplyr:: select(filial, cupom) %>%
@@ -493,13 +497,15 @@ Vendas_A %>%
 
 Muitas vezes queremos sumarizar uma coluna agrupada pelas categorias de uma segunda coluna. Para isso, além do summarize, utilizamos também a função group_by().
 
-```{r dplyr1f, message=FALSE, warning=FALSE}
+```{r dplyr1f}
+#| message: false
+#| warning: false
 
 library(dplyr)
 
 #numero de cupons distintos p/ filial 
 Vendas_A %>%
-group_by(filial) %>%
+  group_by(filial) %>%
   summarise(cupons_distintos = n_distinct(cupom))
 
 # total de compras p/ filial
@@ -524,13 +530,13 @@ Vendas_A %>%
 Vendas_A %>%
   group_by(filial) %>%
   summarize(Media = mean(valor_compra) %>%
-            round(2),
+              round(2),
             Desvio = sd(valor_compra) %>%
-            round(2), 
+              round(2), 
             Minimo = min(valor_compra) %>%
-            round(2),
+              round(2),
             Maximo = max(valor_compra) %>%
-            round(2))
+              round(2))
 
 ```
 
@@ -545,37 +551,39 @@ Utilizar o banco Vendas_A
 
 -   
 
-    1)  ordenar os dados pelo n_itens e valor_compra
+1)  ordenar os dados pelo n_itens e valor_compra
 
 -   
 
-    2)  filtrar valor_compra maior q 150
+2)  filtrar valor_compra maior q 150
 
 -   
 
-    3)  exibe a selecao com filial no inicio
+3)  exibe a selecao com filial no inicio
 
 -   
 
-    4)  cria a variavel valor Medio VM: valor_compra/n_itens)
+4)  cria a variavel valor Medio VM: valor_compra/n_itens)
 
 -   
 
-    5)  arrendamanento pra uma casa decimal de VM
+5)  arrendamanento pra uma casa decimal de VM
 
 -   
 
-    6)  selecionar filial, n_itens, valor_compra e VM no final
+6)  selecionar filial, n_itens, valor_compra e VM no final
 
 -   
 
-    7)  agrupar por filial
+7)  agrupar por filial
 
 -   
 
-    8)  calcular media, mediana, desvio, minimo e maximo
+8)  calcular media, mediana, desvio, minimo e maximo
 
-```{r exercicio1a, message=FALSE, warning=FALSE}
+```{r exercicio1a}
+#| message: false
+#| warning: false
 
 Vendas_A %>%
   dplyr:: arrange(n_itens, valor_compra) %>%
@@ -588,15 +596,15 @@ Vendas_A %>%
 Vendas_A %>%
   dplyr:: group_by(filial) %>%
   dplyr:: summarize(Media = mean(valor_compra) %>%
-              round(2),
-            Mediana = median(valor_compra) %>%
-              round(2),
-            Desvio = sd(valor_compra) %>%
-              round(2), 
-            Minimo = min(valor_compra) %>%
-              round(2),
-            Maximo = max(valor_compra) %>%
-              round(2))
+                      round(2),
+                    Mediana = median(valor_compra) %>%
+                      round(2),
+                    Desvio = sd(valor_compra) %>%
+                      round(2), 
+                    Minimo = min(valor_compra) %>%
+                      round(2),
+                    Maximo = max(valor_compra) %>%
+                      round(2))
 
 ```
 
@@ -622,6 +630,8 @@ O pacote DT fornece uma interface R para a biblioteca JavaScript **DataTables**.
 Segue a base de dados (n=80) referentes as características dos Funcionários que trabalham no Supermercado Formosa, na cidade de Belém, Estado do Pará, em 2023.
 
 ```{r dataset1}
+#| message: false
+#| warning: false
 
 library(DT)
 
@@ -646,7 +656,9 @@ Utilizamos a função **diagnose()**, do **paocte dlookr** na linguagem R, para 
 
 A função diagnose() da biblioteca dlookr que retorna por variável qual o tipo dela, contagem de valores faltantes, frequência de faltantes em relação à base toda.
 
-```{r dlookr1, message=FALSE, warning=FALSE}
+```{r dlookr1}
+#| message: false
+#| warning: false
 
 #library(dlookr)
 
@@ -662,7 +674,9 @@ A função diagnose() da biblioteca dlookr que retorna por variável qual o tipo
 
 ### Tabelas de Frequência: Simples
 
-```{r tab1, message=FALSE, warning=FALSE}
+```{r tab1}
+#| message: false
+#| warning: false
 
 table(mercado2$CARGO)
 table(mercado2$EDUCAÇÃO)
@@ -671,12 +685,17 @@ table(mercado2$LOCAL)
 
 ### Tabelas de Frequência: Proporção
 
-```{r tab2, message=FALSE, warning=FALSE}
+```{r tab2}
+#| message: false
+#| warning: false
 
 prop.table(table(mercado2$CARGO))*100
 prop.table(table(mercado2$EDUCAÇÃO))*100
 prop.table(table(mercado2$LOCAL))*100
 ```
+
+
+
 
 ### Tabelas de Contigência
 
@@ -688,7 +707,13 @@ O **pacote gtsummary** fornece uma maneira elegante e flexível de criar tabelas
 
 A função **tbl_summary()** calcula estatísticas descritivas para variáveis contínuas, categóricas e dicotômicas em R e apresenta os resultados em uma tabela de resumo bonita e personalizável, pronta para publicação.
 
-```{r contigencia1, message=FALSE, warning=FALSE}
+
+
+
+```{r contigencia1}
+#| message: false
+#| warning: false
+
 library(dplyr)
 library(gtsummary)
 
@@ -724,12 +749,17 @@ A função mais famosa para a estatística descritiva no R, é a chamada de summ
 
 A função **summary()** do **pacote basic**, retorna boa parte da estatística descritiva como os quartis, média, mediana, mínimo, máximo e as espécies que há na tabela. É importante saber que de ante-mão, quanto mais próxima a mediana estiver da média, maior a probablidade de a destribuição dos dados ser gaussiana. Esta forma de descrição é mais utilizada para uma obtenção rápida dos parâmetros dos dados.
 
-```{r medida1, message=FALSE, warning=FALSE}
+
+```{r medida1}
+#| message: false
+#| warning: false
 
 summary(mercado2$IDADE)
 summary(mercado2$TEMPOCASA)
 summary(mercado2$SALARIO)
 ```
+
+
 
 ### Interpretação p/ Salário
 
@@ -752,7 +782,12 @@ O **pacote skimr** é um função que nos fornece medidas resumo de variáveis d
 |:----------------------------------:|
 | ![](pacote_skimr.png){width="255"} |
 
-```{r skim1, message=FALSE, warning=FALSE}
+```{r skim1}
+#| message: false
+#| warning: false
+
+
+
 library(skimr)
 
 mercado |> skim()
@@ -774,7 +809,9 @@ Ela fornece também informações individuais sobre cada coluna da base, separan
 
 Conhecer como as variáveis se relacionam também é um passo muito importante antes da elaboração de um modelo quantitativo.
 
-```{r box1, message=FALSE, warning=FALSE}
+```{r box1}
+#| message: false
+#| warning: false
 
 library(magrittr)
 library(dplyr)
@@ -796,7 +833,15 @@ hist(mercado$SALARIO,
      ylab = "Frequência")
 ```
 
-```{r box2, message=FALSE, warning=FALSE}
+
+
+
+
+```{r box2}
+#| message: false
+#| warning: false
+
+
 library(magrittr)
 library(dplyr)
 
@@ -826,7 +871,12 @@ hist(mercado$IDADE,
 
 Vamos investigar como está o comportamento das variáveis através de uma ferramenta chama **diagrama de ramos e folhas**. Para isso vamos usar o comando abaixo:
 
-```{r ramos1, message=FALSE, warning=FALSE}
+
+```{r ramos1}
+#| message: false
+#| warning: false
+
+
 stem(mercado2$IDADE)
 stem(mercado2$SALARIO)
 ```
@@ -836,11 +886,19 @@ stem(mercado2$SALARIO)
 :::
 ::::
 
+
+
+
 #### Diagrama de Dispersão
 
 A função **pairs.panels()** do **pacote psych** no R gera um figura com os gráficos de dispersão 2 a 2, os histogramas de cada variável e as correlações das variaveis 2 a 2.
 
-```{r corr1, message=FALSE, warning=FALSE}
+
+
+
+```{r corr1}
+#| message: false
+#| warning: false
 
 library(psych)
 pairs.panels(mercado,
@@ -850,6 +908,9 @@ pairs.panels(mercado,
              smoother = TRUE)
 
 ```
+
+
+
 
 :::: progress
 ::: {.progress-bar style="width: 100%;"}
