@@ -14,7 +14,7 @@ body{text-align: justify}
 ::: {.callout-note icon="TRUE"}
 Mini Roteiro: AED
 
-Um Mini Roteiro para Realizar uma Análise Exploratória de Dados usando a Linguagem de Programação $R_{4.3}$ com auxílio da IDE RStudio.
+Um Mini Roteiro para Realizar uma Análise Exploratória de Dados usando a Linguagem de Programação $R_{4.5}$ com auxílio da IDE RStudio.
 :::
 
 Em estatística, a análise exploratória de dados (AED) é uma abordagem à análise de conjuntos de dados de modo a resumir suas características principais, frequentemente com métodos visuais. Um modelo estatístico pode ou não ser usado, mas primariamente a AED tem como objetivo observar o que os dados podem nos dizer além da modelagem formal ou do processo de teste de hipóteses.
@@ -38,54 +38,39 @@ Instale pacotes que não estão na sua biblioteca usando a função **install.pa
 
 Por exemplo:
 
--   install.packages("magrittr")
+- install.packages("magrittr")
 
 ### Via Github
 
 Pessoas desenvolvedoras costumam disponibilizar a última versão de seus pacotes no Github, e alguns deles sequer estão no CRAN. Mesmo assim ainda é possível utilizá-los instalando diretamente pelo github. O comando é igualmente simples:
 
--   devtools::install_github("rstudio/shiny")
+- devtools::install_github("rstudio/shiny")
 
 ### Via arquivo .zip/.tar.gz:
 
 Se você precisar instalar um pacote que está zipado no seu computador (ou em algum servidor), utilize o seguinte comando:
 
--   install.packages("C:/caminho/para/o/arquivo/zipado/nome-do-pacote.zip", repos = NULL)
+- install.packages("C:/caminho/para/o/arquivo/zipado/nome-do-pacote.zip", repos = NULL)
 
 É semelhante a instalar pacotes via CRAN, com a diferença que agora o nome do pacote é o caminho inteiro até o arquivo. O parâmetro repos = NULL informa que estamos instalando a partir da máquina local.
+
 
 :::: progress
 ::: {.progress-bar style="width: 100%;"}
 :::
 ::::
 
+
 ## Pacotes Base no **R**
 
 Até aqui utilizamos o que chamamos de Base R, ou seja, sintaxe e funções básicas do R usando apenas os pacotes padrões e pré-carregados. Ao digitar ?sum()no console, por exemplo, podemos ver que se trata de uma função do pacote **base**.
 
--   
-
-1)  statts
-
--   
-
-2)  graphics
-
--   
-
-3)  grDevices
-
--   
-
-4)  utils
-
--   
-
-5)  dataset
-
--   
-
-6)  methods
+- **statts**
+- **graphics**
+- **grDevices**
+- **utils**
+- **dataset**
+- **methods**
 
 Para ver os pacotes carregados por padrão no R, use o comando seguinte:
 
@@ -102,17 +87,9 @@ getOption("defaultPackages")
 
 ## Divisao dos Pacotes do software **R**
 
--   
-
-1)  base : funcoes básicas e preinstaladas e carregadas;
-
--   
-
-2)  recommended : funcoes instaladas mas nao carregadas, Necessário usar o comando *libray()*;
-
--   
-
-3)  contributed : pacotes que nao são instalados automaticamente usa o comando *install.package()*;
+- **base** : funcoes básicas e preinstaladas e carregadas;
+- **recommended** : funcoes instaladas mas nao carregadas, Necessário usar o comando libray();
+- **contributed** : pacotes que nao são instalados automaticamente usa o comando install.package();
 
 :::: progress
 ::: {.progress-bar style="width: 100%;"}
@@ -161,10 +138,7 @@ getOption("defaultPackages")
 
 ```
 
-:::: progress
-::: {.progress-bar style="width: 100%;"}
-:::
-::::
+
 
 :::: progress
 ::: {.progress-bar style="width: 100%;"}
@@ -178,7 +152,9 @@ O diretório de trabalho (ou **working directory**) é a pasta de seu computador
 Assim, o primeiro Passo é definir o diretório de trabalho no R.
 
 
-```{r diretorio1a, message=FALSE, warning=FALSE}
+```{r diretorio1a}
+#| message: false
+#| warning: false
 
 # setwd: set working directory
 # Definir o Diretório de Trabalho (caminho)
@@ -208,24 +184,30 @@ Um dos primeiros passos de um projeto é importar dados externos para o software
 
 O pacote readr faz parte de um ecosisytema de pacotes **tidyverse**,e é utilizado para importar arquivos de texto, como **.txt** ou **.csv**, para o **R**. Para carregá-lo, rode o código:
 
-```{r pacotereadr1a, message=FALSE, warning=FALSE}
+```{r pacotereadr1a}
+#| message: false
+#| warning: false
 
 library(readr)
 ```
 
+
 O pacote readr transforma arquivos de textos em **tibbles** usando as funções:
 
--   **read_csv()**: lê arquivos CSV (comma separated file) que seguem o padrão americano. Isto é, arquivos .txt ou .csv onde os valores são separados por vírgula (,).
--   **read_csv2()**: lê arquivos CSV (*comma separated file*) que seguem o padrão adotado pelo Brasil e por alguns países europeus. Isto é, arquivos .txt ou .csv onde os valores são separados por ponto e vírgula (;).
--   **read_tsv()**: lê arquivos TSV (tab separated values). Arquivos .txt ou .tsv onde os valores são separados por tabulação (\t).
--   **read_delim()**: essa é uma função geral, que é capaz de ler qualquer tipo de arquivo de texto em que os valores estão delimitados por algum caractere especial.
--   **read_table()**: para arquivos de texto tabular com colunas separadas por espaço.
--   **read_fwf()**: lê arquivos FWF (fixed width file). Arquivos .txt ou .fwf onde cada coluna do arquivo possui uma largura fixa de valores.
--   **read_log()**: para arquivos padrões de log.
+- **read_csv()**: lê arquivos CSV (comma separated file) que seguem o padrão americano. Isto é, arquivos .txt ou .csv onde os valores são separados por vírgula (,).
+- **read_csv2()**: lê arquivos CSV (*comma separated file*) que seguem o padrão adotado pelo Brasil e por alguns países europeus. Isto é, arquivos .txt ou .csv onde os valores são separados por ponto e vírgula (;).
+- **read_tsv()**: lê arquivos TSV (tab separated values). Arquivos .txt ou .tsv onde os valores são separados por tabulação (\t).
+- **read_delim()**: essa é uma função geral, que é capaz de ler qualquer tipo de arquivo de texto em que os valores estão delimitados por algum caractere especial.
+- **read_table()**: para arquivos de texto tabular com colunas separadas por espaço.
+- **read_fwf()**: lê arquivos FWF (fixed width file). Arquivos .txt ou .fwf onde cada coluna do arquivo possui uma largura fixa de valores.
+- **read_log()**: para arquivos padrões de log.
 
 Segue como exemplor a leitura de base de dados via url
 
-```{r pacotereadr1ab, message=FALSE, warning=FALSE}
+
+```{r pacotereadr1ab}
+#| message: false
+#| warning: false
 
 library(readr)
 
@@ -248,7 +230,9 @@ Segundo Passo é carregar a base de dados, chamada de mercado. Para isso é nece
 
 Posteriormente, ativar o pacote no R com o comando library(readxl). Tendo um detalhe fundamental, que se instala somente um vez o pacote, e se ativa toda vez que for usar.
 
-```{r base1a, message=FALSE, warning=FALSE}
+```{r base1a}
+#| message: false
+#| warning: false
 
 library(readxl)
 setwd('C:/Users/usuario/Documents/github_2026/Curso_Analise_Dados_R_ParteI/Curso_Analise_Dados_Parte1')
@@ -257,11 +241,11 @@ mercado <- read_excel('mercado.xlsx')
 mercado2 <- read_excel('mercado2.xlsx')
 ```
 
+
 :::: progress
 ::: {.progress-bar style="width: 100%;"}
 :::
 ::::
-
 
 
 ### Pacote **have**
@@ -298,56 +282,25 @@ O dplyr é o pacote mais útil para realizar transformação de dados, aliando s
 
 As principais funções do **dplyr** são:
 
--   
+- select() : extrai colunas de uma tabela na forma de tabela
+- pull() : extrai uma coluna de uma tabela na forma de vetor
+- filter() : filtra linhas
+- distinct() : remove as linhas com valores repetidos
+- arrange() : reordena ou combina linhas
+- mutate() : cria/modifica novas colunas no banco original
+- summarize() : sumariza valores
+- group_by() : operações por grupos
+- add_column() : adiciona novas colunas
+- add_row() : adiciona novas linhas
+- rename() : renomeia uma coluna
 
-1)  select() : extrai colunas de uma tabela na forma de tabela
-
--   
-
-2)  pull() : extrai uma coluna de uma tabela na forma de vetor
-
--   
-
-3)  filter() : filtra linhas
-
--   
-
-4)  distinct() : remove as linhas com valores repetidos
-
--   
-
-5)  arrange() : reordena ou combina linhas
-
--   
-
-6)  mutate() : cria/modifica novas colunas no banco original
-
--   
-
-7)  summarize() : sumariza valores
-
--   
-
-8)  group_by() : operações por grupos
-
--   
-
-9)  add_column() : adiciona novas colunas
-
--   
-
-10) add_row() : adiciona novas linhas
-
--   
-
-11) rename() : renomeia uma coluna
 
 As principais vantagens de se usar o dplyr em detrimento das funções do R base são:
 
--   Manipular dados se torna uma tarefa muito mais simples.
--   O código fica mais intuitivo de ser escrito e mais simples de ser lido.
--   O pacote dplyr utiliza C e C++ por trás da maioria das funções, o que geralmente torna o código mais rápido.
--   É possível trabalhar com diferentes fontes de dados, como bases relacionais (SQL)
+- Manipular dados se torna uma tarefa muito mais simples.
+- O código fica mais intuitivo de ser escrito e mais simples de ser lido.
+- O pacote dplyr utiliza C e C++ por trás da maioria das funções, o que geralmente torna o código mais rápido.
+- É possível trabalhar com diferentes fontes de dados, como bases relacionais (SQL)
 
 :::: progress
 ::: {.progress-bar style="width: 100%;"}
@@ -396,14 +349,18 @@ Vendas_A %>%
   head()
 ```
 
+
 :::: progress
 ::: {.progress-bar style="width: 100%;"}
 :::
 ::::
 
+
 #### Função **arrange()**
 
 Para ordenar linhas, utilizamos a função arrange(). O primeiro argumento é a base de dados. Os demais argumentos são as colunas pelas quais queremos ordenar as linhas. No exemplo a seguir, ordenamos as linhas da base por ordem crescente de orçamento.
+
+
 
 ```{r dplyr1c}
 #| message: false
@@ -454,7 +411,9 @@ Vendas_A %>%
   head()
 ```
 
+
 O mutate acrescenta novas colunas aos dados originais, ja o transmute cria novas colunas apartir dos dados
+
 
 :::: progress
 ::: {.progress-bar style="width: 100%;"}
@@ -466,6 +425,8 @@ O mutate acrescenta novas colunas aos dados originais, ja o transmute cria novas
 Sumarização é a técnica de se resumir um conjunto de dados utilizando alguma métrica de interesse. A média, a mediana, a variância, a frequência, a proporção, por exemplo, são tipos de sumarização que trazem diferentes informações sobre uma variável.
 
 Para sumarizar uma coluna da base, utilizamos a função summarize(). O código abaixo resume a coluna orçamento pela sua média.
+
+
 
 ```{r dplyr1e, message=FALSE, warning=FALSE}
 
@@ -488,14 +449,17 @@ Vendas_A %>%
 
 ```
 
+
 :::: progress
 ::: {.progress-bar style="width: 100%;"}
 :::
 ::::
 
+
 #### Função **grupo_by()**
 
 Muitas vezes queremos sumarizar uma coluna agrupada pelas categorias de uma segunda coluna. Para isso, além do summarize, utilizamos também a função group_by().
+
 
 ```{r dplyr1f}
 #| message: false
@@ -549,37 +513,17 @@ Vendas_A %>%
 
 Utilizar o banco Vendas_A
 
--   
+- ordenar os dados pelo n_itens e valor_compra
+- filtrar valor_compra maior q 150
+- exibe a selecao com filial no inicio
+- cria a variavel valor Medio VM: valor_compra/n_itens)
+- arrendamanento pra uma casa decimal de VM
+- selecionar filial, n_itens, valor_compra e VM no final
+- agrupar por filial
+- calcular media, mediana, desvio, minimo e maximo
 
-1)  ordenar os dados pelo n_itens e valor_compra
 
--   
 
-2)  filtrar valor_compra maior q 150
-
--   
-
-3)  exibe a selecao com filial no inicio
-
--   
-
-4)  cria a variavel valor Medio VM: valor_compra/n_itens)
-
--   
-
-5)  arrendamanento pra uma casa decimal de VM
-
--   
-
-6)  selecionar filial, n_itens, valor_compra e VM no final
-
--   
-
-7)  agrupar por filial
-
--   
-
-8)  calcular media, mediana, desvio, minimo e maximo
 
 ```{r exercicio1a}
 #| message: false
@@ -782,10 +726,12 @@ O **pacote skimr** é um função que nos fornece medidas resumo de variáveis d
 |:----------------------------------:|
 | ![](pacote_skimr.png){width="255"} |
 
+
+
+
 ```{r skim1}
 #| message: false
 #| warning: false
-
 
 
 library(skimr)
@@ -793,6 +739,8 @@ library(skimr)
 mercado |> skim()
 
 ```
+
+
 
 Veja que a saída da função skim mostra uma visão geral da base de dados, nos dando informações como número de linhas, número de colunas, e os tipos das colunas
 
@@ -808,6 +756,8 @@ Ela fornece também informações individuais sobre cada coluna da base, separan
 #### Histograma com Boxplot
 
 Conhecer como as variáveis se relacionam também é um passo muito importante antes da elaboração de um modelo quantitativo.
+
+
 
 ```{r box1}
 #| message: false

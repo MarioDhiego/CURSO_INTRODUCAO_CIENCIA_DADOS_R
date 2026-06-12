@@ -1,0 +1,874 @@
+```{=html}
+<style>
+body{text-align: justify}
+</style>
+```
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+  
+  
+# **Analise Qualitativa**
+
+Os pacotes utulizados para realizar a maioria das analises qualitativas.
+
+
+## Data Frame
+### Importar os datasets e transformar em um dataset único.
+
+
+- Importação dos *datasets* presentes no pacote literaturaBR na data de hoje e os transformar em um dataset só:
+
+
+```{r}
+#| message: false
+#| warning: false
+
+library(literaturaBR)
+library(tidyverse) 
+
+data("alienista")
+data("cotico")
+data("dom_casmurro")
+data("memorias_postumas_bras_cubas")
+data("memorias_de_um_sargento_de_milicias")
+data("ateneu")
+data("escrava_isaura")
+data("noite_na_taverna")
+
+df <- bind_rows(alienista,
+                cortico,
+                dom_casmurro,
+                memorias_postumas_bras_cubas,
+                memorias_de_um_sargento_de_milicias,
+                ateneu,
+                escrava_isaura,
+                noite_na_taverna)
+
+```
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+## Estrutura geral dos Dados.
+
+Todos os datasets fornecidos pelo pacote literaturaBR possuem a mesma estrutura, onde cada linha corresponde a um parágrafo de um livro e contêm 5 variáveis:
+
+
+- **book_name**: Nome original do livro;
+- **chapter_name**: Nome original do capítulo do livro do parágrafo;
+- **url**: Link para artigo do Wikisouce de onde o capítulo do parágrafo foi extraído;
+- **paragraph_number**: Ordem do parágrafo em seu capítulo;
+- **text**: Texto do parágrafo. Contem acentos e pontuação.
+
+
+
+```{r}
+#| message: false
+#| warning: false
+
+glimpse(df)
+```
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+```{r}
+#| message: false
+#| warning: false
+
+df_corpus <- df %>% 
+  # agrupar por livro
+  group_by(book_name) %>% 
+  # formatar o dataframe para que so tenha uma linha por livro
+  summarise(text = paste0(text, sep = "", collapse = ". "))
+
+dim(df_corpus)
+```
+
+
+## Contagem de Palavras
+
+Com base na função *summary*, é possível verificar a quantidade de informação básica das palavras.
+
+- **Types**: N°de Palavras Diferentes
+- **Tokens**: N°Total de Palavras
+- **Sentences**: N°de Frases em cada Livro
+
+
+
+```{r}
+#| message: false
+#| warning: false
+
+library(quanteda)
+
+
+meu_corpus <- quanteda::corpus(df_corpus$text, docnames = df_corpus$book_name)
+summary(meu_corpus)
+
+```
+
+
+
+
+
+Vamos então criar uma document-feature matrix a partir desse corpus criado, tomando o cuidade de remover pontuações e stopwords:
+ 
+
+
+```{r}
+#| message: false
+#| warning: false
+
+library(quanteda)
+
+# 1. Tokenizar o corpus removendo pontuação e símbolos
+tokens_corpus <- tokens(meu_corpus, 
+                        remove_punct = TRUE, 
+                        remove_symbols = TRUE, 
+                        remove_numbers = TRUE)
+
+# 2. Converter para minúsculas (essencial para que 'Ele' e 'ele' sejam a mesma palavra)
+tokens_corpus <- tokens_tolower(tokens_corpus)
+
+# 3. Remover stopwords em português
+tokens_clean <- tokens_remove(tokens_corpus, pattern = stopwords("portuguese"))
+
+# 4. Criar a Document-Feature Matrix (DFM)
+corpus_dfm <- dfm(tokens_clean)
+
+# --- ANÁLISES ---
+
+# A) As 30 palavras mais comuns no corpus INTEIRO (todos os livros somados)
+top_words_geral <- topfeatures(corpus_dfm, n = 30)
+print("--- 30 Palavras mais comuns no geral ---")
+print(top_words_geral)
+
+# B) As 30 palavras mais comuns de um livro ESPECÍFICO (ex: A Escrava Isaura)
+# Primeiro filtramos a DFM para conter apenas o documento desejado
+dfm_isaura <- dfm_subset(corpus_dfm, docnames(corpus_dfm) == "O escravo Isaura" | docnames(corpus_dfm) == "escrava_isaura") 
+# Nota: Verifique o nome exato que aparece no summary(meu_corpus) para bater com o filtro
+
+top_words_book <- topfeatures(dfm_isaura, n = 30)
+print("--- 30 Palavras mais comuns em 'Escrava Isaura' ---")
+print(top_words_book)
+
+# C) Retorna a ocorrência das 15 palavras mais frequentes do dataset em cada livro
+# Primeiro ordenamos a DFM pela frequência das palavras
+dfm_ordenada <- dfm_sort(corpus_dfm, margin = "features")
+print("--- Matriz de ocorrência (8 livros x 15 palavras mais frequentes) ---")
+print(dfm_ordenada[, 1:15])
+
+```
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+
+## Document-Feature Matrix
+
+
+```{r}
+#| message: false
+#| warning: false
+
+
+# Tokenizar o corpus
+tokens_corpus <- tokens(meu_corpus, remove_punct = TRUE)
+
+# Criar o dfm a partir dos tokens
+corpus_dfm <- dfm(tokens_corpus)
+
+# Agrupar o dfm por livro
+corpus_dfm_grouped <- dfm_group(corpus_dfm, groups = df_corpus$book_name)
+
+# Remover Pontuações/stopwords
+corpus_dfm_grouped <- dfm_remove(corpus_dfm_grouped, quanteda::stopwords("portuguese"))
+
+# Usar topfeatures para obter as 30 palavras mais comuns
+top_words <- topfeatures(corpus_dfm_grouped, 30)
+print(top_words)
+
+# Para um livro específico (substitua "NomeDoLivro" pelo nome real do livro)
+top_words_book <- topfeatures(corpus_dfm_grouped[, df_corpus$book_name == "escrava_isaura"], 30)
+print(top_words_book)
+
+
+dfm_sort(corpus_dfm)[, 1:15]
+```
+
+
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+
+## Ocorrência das Palavras
+
+
+- A função dfm_sort() retorna a ocorrência de cada palavra (também chamado de token ou feature) em cada livro. Para pesquisar a ocorrência de alguma palavra específica nos documentos, use a função dfm_select().
+
+
+
+```{r}
+#| message: false
+#| warning: false
+
+
+# Ocorrências da palavras
+dfm_select(corpus_dfm, "amor")
+dfm_select(corpus_dfm, "fogo")
+dfm_select(corpus_dfm, "paixão")
+dfm_select(corpus_dfm, "padre")
+```
+
+
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+
+## Contexto das Palavras
+
+Para identificar o contexto em que cada palavra aparece, pode-se usar a função *kwic()* ou *tokens()* para isso:
+
+
+```{r}
+#| message: false
+#| warning: false
+
+tokens_corpus <- tokens(meu_corpus)
+concordancias <- kwic(tokens_corpus, "amor") %>% head(10) 
+concordancias <- kwic(tokens_corpus, "padre") %>% head(10) 
+print(concordancias)
+
+```
+
+
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+  
+  
+## Palavras mais Utilizadas 
+
+Para saber as palavras mais usadas, dentre os vários métodos possíveis para isso, pode-se usar a função *topfeatures()*.
+  
+  
+```{r}
+#| message: false
+#| warning: false
+
+topfeatures(corpus_dfm, groups = df_corpus$book_name)
+
+```
+
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+  
+  
+  
+## Comparação entre Livros
+
+
+Algo interessante a se fazer é quantificar a similaridade e a dissimilaridade ou distância entre os livros. As funções textstat_simil e textstat_dist implementam diversas técnicas e algoritmos para isso. Sugiro ler a documentação completa das funções e ler as referências indicadas para conhecer melhor os métodos de cálculo.
+
+Vamos então calcular a similaridade entre os livros presentes no pacote:
+
+
+
+```{r}
+#| message: false
+#| warning: false
+
+library(quanteda)
+library(quanteda.textplots)
+library(quanteda.textstats)
+library(cluster)
+library(stats)
+
+# normalizar os livros pelo seu tamanho
+corpus_dfm_norm <- dfm_weight(corpus_dfm, "count")
+corpus_simil <- textstat_simil(corpus_dfm_norm, method = "correlation",
+                               margin = "documents", upper = TRUE,
+                               diag = FALSE)
+# ver os resultados individualmente para cada livro
+round(corpus_simil, 3)
+
+```
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+
+Passemos então para a análise da dissimilaridade ou distância entre os livros, com o auxílio de um dendograma:
+  
+  
+```{r}
+#| message: false
+#| warning: false
+
+library(quanteda)
+library(quanteda.textstats)
+library(stats)
+
+# 1. Normalizar a DFM (transformar contagem absoluta em frequência relativa / proporção)
+# Isso impede que livros mais longos distorçam a distância Euclidiana
+corpus_dfm_norm <- dfm_weight(corpus_dfm, scheme = "prop")
+
+# 2. Calcular a matriz de distância Euclidiana entre os documentos (livros)
+corpus_dist <- textstat_dist(corpus_dfm_norm, 
+                             method = "euclidean", 
+                             margin = "documents")
+
+# 3. Converter o objeto do quanteda para uma matriz de distância nativa do R
+dist_matrix <- as.dist(corpus_dist)
+
+# 4. Executar o agrupamento hierárquico (método Ward de preferência, ou o padrão "complete")
+hc <- hclust(dist_matrix, method = "ward.D2")
+
+# 5. Plotar o Dendrograma estilizado
+plot(hc, 
+     main = "Dendrograma de Similaridade dos Livros",
+     xlab = "Livros (Clustering Hierárquico)", 
+     sub = "Distância Euclidiana / Método Ward",
+     hang = -1) # Alinha as folhas do dendrograma na base
+
+```
+  
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+## Análise de Sentimento
+
+
+
+```{r}
+#| message: false
+#| warning: false
+
+
+library(tidytext)
+
+# Criar um dataframe em que cada linha corresponda a uma unica palavra
+df.token <- df %>%
+  unnest_tokens(term, text)
+
+glimpse(df.token)
+```
+
+
+
+
+
+```{r}
+#| message: false
+#| warning: false
+library(lexiconPT)
+
+
+# importar lexico de sentimentos
+data("oplexicon_v3.0")
+df.token <- df.token %>%
+  inner_join(oplexicon_v3.0, by = "term")
+```
+
+
+- Para isso, primeiro precisamos normalizar os livros, visto que eles apresentam tamanhos e quantidades de capítulos diferentes.
+
+
+```{r}
+#| message: false
+#| warning: false
+
+
+# extrair capitulos de cada livro
+df_chapter_number <- df.token %>%
+  distinct(book_name, chapter_name) %>%
+  group_by(book_name) %>%
+  # normalizar capitulo de acordo com sua posicao no livro
+  mutate(chapter_number_norm = row_number()/max(row_number()))
+
+glimpse(df_chapter_number)
+
+```
+
+
+
+
+- Agora calculamos o sentimento de cada capítulo, que corresponde à soma da polaridade de suas palavras:
+
+
+
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tidytext)
+library(tidyverse)
+library(lexiconPT)
+
+# 1. Preparar o dicionário de sentimentos
+dic_sentimento <- oplexicon_v3.0 %>% 
+  select(term, polarity)
+
+# 2. Tokenizar, calcular a polaridade e gerar a posição relativa do capítulo
+df.sentiment <- df %>%
+  tidytext::unnest_tokens(output = term, input = text) %>%
+  inner_join(dic_sentimento, by = "term") %>%
+  group_by(book_name, chapter_name) %>%
+  summarise(polarity = sum(polarity, na.rm = TRUE), .groups = "drop_last") %>%
+  # Calcula a numeração sequencial e relativa dos capítulos por livro
+  mutate(chapter_number = row_number(),
+         chapter_number_norm = chapter_number / max(chapter_number)) %>%
+  ungroup() %>%
+  arrange(book_name, chapter_number_norm)
+
+# 3. Seu gráfico original de linhas
+df.sentiment %>%
+  ggplot(aes(x = chapter_number_norm, y = polarity)) +
+  geom_line() +
+  facet_wrap(~ book_name, ncol = 4, labeller = label_wrap_gen(20)) +
+  labs(x = "Posição relativa no livro", y = "Sentimento") +
+  theme_bw()
+```
+
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+  
+  
+  
+  
+  
+
+## COMPLEXIDADE LÉXICA DAS PALAVRAS
+### TTR — Type-Token Ratio
+  
+  
+  
+  
+```{r}
+#| message: false
+#| warning: false
+
+library(quanteda.textstats)
+library(tidyverse)
+
+# 1. Calcular a diversidade lexical (TTR)
+# O resultado já é um data frame com as colunas "document" e "TTR"
+lexdiv <- textstat_lexdiv(corpus_dfm, measure = "TTR")
+print(lexdiv)
+
+# 2. Gerar o gráfico corrigido
+lexdiv %>% 
+  # Renomeia 'document' para 'livro' para manter sua estrutura
+  rename(livro = document) %>% 
+  # Ordena os livros pelo valor do TTR
+  mutate(livro = forcats::fct_reorder(livro, TTR)) %>% 
+  # Gráfico
+  ggplot(aes(x = livro, y = TTR)) + 
+    geom_col(fill = "cadetblue4", width = 0.7) +
+    coord_flip() + 
+    labs(
+      title = "Diversidade Lexical por Obra",
+      subtitle = "Métrica: Type-Token Ratio (TTR)",
+      x = NULL, 
+      y = "TTR (Proporção de Palavras Únicas)"
+    ) +
+    theme_minimal(base_size = 11) +
+    theme(
+      plot.title = element_text(face = "bold"),
+      panel.grid.minor = element_blank()
+    )
+
+```
+
+
+O livro que apresenta a maior diversidade léxica, de acordo com a métrica Type-Token Ratio (TTR), é O Alienista. Ateneu vem bem atrás dos demais.
+
+
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+## Ocorrência das Palavras/Livros
+### Gráfico de Dispersão Lexical
+
+
+
+```{r}
+#| message: false
+#| warning: false
+
+library(quanteda)
+library(quanteda.textplots)
+library(stringr)
+
+# 1. Tokenizar o corpus (obrigatório para o kwic nas versões recentes)
+meu_corpus %>%
+  tokens() %>%
+  
+  # 2. Buscar o termo desejado (ignorando maiúsculas/minúsculas com regex)
+  kwic(pattern = "amor", valuetype = "regex") %>%
+  
+  # 3. Gerar o gráfico de dispersão lexical
+  textplot_xray(scale = "relative") +
+  
+  # 4. Ajustes estéticos para limpar o visual e espaçar os nomes dos livros
+  scale_y_discrete(labels = function(x) str_wrap(x, width = 20)) +
+  labs(
+    title = "",
+    x = "Relative Token Index",
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    strip.text = element_text(face = "bold")
+  )
+
+
+```
+
+
+
+```{r}
+#| message: false
+#| warning: false
+
+
+
+library(quanteda)
+library(quanteda.textplots)
+
+# 1. Criar os tokens a partir do corpus (passo obrigatório para o kwic moderno)
+tokens_para_busca <- tokens(meu_corpus)
+
+# 2. Buscar a palavra "amor" (usando 'valuetype = "regex"' para ignorar maiúsculas/minúsculas)
+termo_busca <- kwic(tokens_para_busca, pattern = "fogo", valuetype = "regex")
+
+# 3. Gerar o gráfico de raio-X com a escala relativa
+textplot_xray(termo_busca, scale = "relative") +
+  labs(
+    title = "",
+    x = "Posição Relativa no Texto",
+    y = "Livros"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    strip.text = element_text(face = "bold")
+  )
+
+
+
+```
+
+  
+
+  
+  
+  
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+
+
+## Nuvem de Palavras
+
+
+Usando um outro exemplo, utilizou-se as respostas de 2 perguntas realizadas em entrevista na cidade de Altamira.
+
+
+
+```{r}
+
+library(dplyr)
+library(stringr)
+library(tidytext)
+library(tm)
+library(wordcloud)
+library(RColorBrewer)
+library(plotly)
+library(DT)
+
+
+
+# Criar um vetor com as palavras/frases fornecidas
+dados_alegria <- c(
+  "Falar com Deus, jogar bola, anda de bike com os amigos",
+  "Brincar, comer, estudar e andar de ônibus",
+  "Ficar feliz, brincar",
+  "É divertir",
+  "Brincar com irmãos, assistir televisão",
+  "Flor, eu gosto de flor",
+  "Comida",
+  "Ver o sol, comer caju, come bolo",
+  "Tomar banho na praia",
+  "Ter um cachorrinho",
+  "Ir para praia, ir pra aula, ir pra Santarém, ir no centro",
+  "É quando fico alegre",
+  "Quando eu lavo louça",
+  "É brincar",
+  "Assistir televisão",
+  "Alegria é quando estamos alegre, quando dão as coisa pra gente fica alegre",
+  "Não sei",
+  "Quando a gente tá feliz",
+  "Alegria é estudar, fico feliz porque a mamãe compra tudo pra mim comer quando estou com fome, é ficar alegre",
+  "Alegria é quando estamos estudando",
+  "Brincar e se divertir",
+  "Brincar",
+  "Ficar mamãe, gosto da mamãe, vovô",
+  "Quando a gente ficar estudando",
+  "Alegria é brincar com minhas irmãs e minha prima Andressa",
+  "Respeitar, obedecer a mae, fazer tudo o que ela mandar e eu ajudar ela",
+  "Diversão, gosto de brincar, pescar, joga bola e ir na praia",
+  "Dormir la em casa",
+  "Ter família",
+  "É brincar e correr",
+  "Quando sinto felicidade e vejo alguém que amo",
+  "É meus irmãos. Eles são especiais para mim",
+  "Quando ganho alguma coisa, e quando a mamãe me leva pro parque",
+  "Jesus, ir no rio pegar peixinho, concha e sapinho",
+  "Morar para santarém",
+  "Ir pra casa. Ir com a mamãe e papai. Quando vai pra casa fico alegre",
+  "Papai, a vovó",
+  "QUANDO A GENTE FICA ALEGRE COM UMA PESSOA",
+  "É brincar",
+  "Amor e carinho",
+  "Brincar, quando tenho cachorrinho, quando to tomando banho na praia",
+  "Só quando eu brinco com meus coleguinhas",
+  "É a gente brincar e se divertir e passear",
+  "A mamãe, porque ela é bonita, o Gabriel me deixa alegre, porque ele não briga. Eu lavo prato.",
+  "Brincar com as pessoas de boneca. Brincar com os irmãos. Cuidar do bebê. Dar banho e coloca fralda com a ajuda da irmã",
+  "Quando a gente ficar estudando",
+  "É animado, com presente, papai quando vem, traz algum presente ora mim, muito animado.",
+  "Sorrir (sorrio e gargalhou)",
+  "Dormir la em casa",
+  "Gostar do pai, irmão e da mãe",
+  "Fazer trabalho, estudar, brincar",
+  "É FELIZ"
+)
+
+
+
+```
+
+
+
+
+```{r}
+
+
+dados_tristeza <- c(
+  "Não jogar bola e não andar de bike",
+  "Triste, chorar, falarem mal de mim e me empurrar",
+  "Quando fico brabo, não compartilhar o brinquedo com o amigo",
+  "Chorar",
+  "Quando o Heitor bate em mim (irmão), mas o Hercules não (outro irmão), e quando brigam por causa de brinquedo",
+  "A minha vó morreu",
+  "Chuva",
+  "Gosto de garrafa verde e ninguém deixa, triste",
+  "Não ir na praia",
+  "Quando minha mãe vai embora",
+  "Não sei",
+  "Quando eu fico triste quando acontece alguma coisa e fico triste",
+  "Quando me jogam ovo no meu aniversário",
+  "É o sol, porque deixa muito quente",
+  "Feliz",
+  "Quando fica chorando",
+  "Quando meu amigo me chuta ai fico triste",
+  "Quando a gente tá triste, umas vezes a gente chora, outras não chora",
+  "Não sei como é",
+  "Fico chorando, triste",
+  "Fico mal e fico doente",
+  "Saudade da avó",
+  "Tristeza, saudade",
+  "Quando alguém fica brabo",
+  "É ver minhas irmãs brigando e parando de brincar comigo",
+  "Quando minha mae bate na minha irmã Yara, fazer vergonha e não dizer desculpa",
+  "Quando a mamãe bate e a gente chora",
+  "Não sei",
+  "Não ser obediente com a mãe",
+  "Partir o coração",
+  "Quando alguém morre",
+  "É quando meus pais me batem",
+  "Quando o papai vai embora pra santarém",
+  "Quando a concha fura meu pé e quando o lago é muito fundo",
+  "Não sei fiquei triste porque conhecia ela (avó)",
+  "Quando venho pra escola e o papai vai embora, eu choro. Quando papai deixa na escola e vai embora",
+  "Papai, porque ele só briga",
+  "QUANDO FICA TRISTE, QUANDO UM APESSOA MENTE PRA MIM EU FICO MUITO TRISTE",
+  "Quando falam mal de mim",
+  "Chorar",
+  "Quando minha mae me bate, quando não tenho brinquedo",
+  "Não tenho tristeza",
+  "É a gente ficar sozinho e não querer barulho",
+  "É não beliscar, porque quando o coleguinha senta perto e não é pra beliscar. Dor de cabeça. Dor de garganta. Dodói.",
+  "A mãe ralha. Mãe bate. Mãe castiga. Na escola quando o colega puxa o cabelo",
+  "Quando alguém fica brabo",
+  "Quando chora, quando alguém bate, corro pra minha mãe.",
+  "Chorar",
+  "Não sei",
+  "A mãe rabiscar a atividade. Não fazer birra e nem chamar palavrão",
+  "Quando eu caio, quando fico brabo, quando estou doente",
+  "É TRISTE, CHORA"
+)
+```
+
+
+
+
+```{r}
+#| message: false
+#| warning: false
+
+
+# Armazenar no objeto chamado corpus1
+corpus_alegria <- Corpus(VectorSource(dados_alegria))
+corpus_tristeza <- Corpus(VectorSource(dados_tristeza))
+
+# Pré-processamento de texto: converter para minúsculas, remover pontuação, etc.
+corpus_alegria <- tm_map(corpus_alegria, content_transformer(tolower))
+corpus_alegria  <- tm_map(corpus_alegria , removePunctuation)
+corpus_alegria  <- tm_map(corpus_alegria , removeNumbers)
+corpus_alegria  <- tm_map(corpus_alegria , removeWords, stopwords("portuguese"))
+corpus_alegria  <- tm_map(corpus_alegria , stripWhitespace)
+
+
+corpus_tristeza <- tm_map(corpus_tristeza, content_transformer(tolower))  # Converter para minúsculas
+corpus_tristeza <- tm_map(corpus_tristeza, removePunctuation)             # Remover pontuação
+corpus_tristeza <- tm_map(corpus_tristeza, removeNumbers)                 # Remover números
+corpus_tristeza <- tm_map(corpus_tristeza, removeWords, stopwords("portuguese"))  # Remover palavras comuns
+corpus_tristeza <- tm_map(corpus_tristeza, stripWhitespace)
+
+```
+
+
+
+
+
+
+
+```{r}
+
+# Criar uma matriz de termos
+tdm <- TermDocumentMatrix(corpus_alegria)
+tdm_tristeza <- TermDocumentMatrix(corpus_tristeza)
+
+# Converter a matriz de termos em uma matriz de dados
+m <- as.matrix(tdm)
+word_freqs <- sort(rowSums(m), decreasing = TRUE)
+
+
+m_tristeza <- as.matrix(tdm_tristeza)
+word_freqs_tristeza <- sort(rowSums(m_tristeza), decreasing = TRUE)
+
+```
+
+
+
+
+
+```{r}
+
+
+# Criar a nuvem de palavras Alegria
+wordcloud(names(word_freqs), 
+          word_freqs, 
+          min.freq = 1,                        
+          max.words = 200,                     
+          random.order = FALSE,
+          random.color = TRUE,
+          scale=c(6,0.5), 
+          colors=brewer.pal(8, "Dark2")
+          )
+
+```
+
+
+
+```{r}
+#| message: false
+#| warning: false
+
+
+wordcloud(names(word_freqs_tristeza), 
+          word_freqs_tristeza, 
+          min.freq = 1,                        
+          max.words = 200,                     
+          random.order = FALSE,
+          random.color = TRUE,
+          scale=c(6,0.5), 
+          colors=brewer.pal(8, "Dark2")
+)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+  
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+
