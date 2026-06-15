@@ -1,0 +1,92 @@
+```{=html}
+<style>
+  body{text-align: justify}
+</style>
+```
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+
+# **Instalação e Configuração do R e RStudio**
+## Introdução
+
+A linguagem **R** é uma das ferramentas mais poderosas para análise de dados, estatística e ciência de dados. Utilizada por cientistas, estatísticos e analistas ao redor do mundo, essa linguagem se destaca pela flexibilidade e pela vasta coleção de pacotes disponíveis.
+
+No entanto, para aproveitar todo o potencial do R, é essencial contar com um ambiente de desenvolvimento eficiente, e é aqui que entra o RStudio.
+
+O **RStudio** é um IDE (Ambiente de Desenvolvimento Integrado) que facilita a escrita, execução e depuração de códigos em R. Sua interface intuitiva oferece uma experiência aprimorada tanto para quem está começando quanto para quem já programa há algum tempo.
+
+Nesta aula, você vai aprender passo a passo como instalar o R e RStudio corretamente no seu computador, além de conhecer os principais recursos desse ambiente.
+
+
+O R é uma linguagem de programação voltada para estatística, análise de dados e machine learning. Ele possui uma ampla variedade de bibliotecas e pacotes especializados em cálculos estatísticos, manipulação de dados e visualização gráfica.
+
+As principais características do R incluem:
+
+- Código aberto: Gratuito e constantemente atualizado por uma comunidade ativa.
+- Suporte para análise estatística: Desde estatísticas básicas até modelagem avançada.
+- Gráficos e visualizações: Permite criar gráficos detalhados e interativos.
+- Compatibilidade com outras linguagens: Pode ser integrado ao Python, SQL, C++, entre outras.
+
+
+Para utilizar o R de forma mais eficiente, recomenda-se o uso do RStudio, que oferece um ambiente estruturado para escrita de código e gerenciamento de projetos.
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+
+## Como Instalar o R
+
+Antes de instalar o RStudio, é necessário instalar o R. Siga as instruções abaixo conforme o seu sistema operacional.
+
+- Acesse o site oficial do R: https://cran.rstudio.com/.
+- Selecione a opção compatível com seu sistema operacional, como *Download R for Windows*.
+- Selecione a opção base e baixe o instalador mais recente.
+- Após o download, abra o arquivo *.exe* e siga os passos da instalação:
+  - Clique em *Next* até chegar na escolha do diretório de instalação.
+  - Escolha um local adequado (ou mantenha o padrão).
+  - Defina o idioma e finalize a instalação.
+
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+
+
+
+## Como Instalar o RStudio
+
+
+Após instalar o R, é necessário instalar o RStudio para um ambiente de desenvolvimento mais eficiente.
+
+- Acesse o site oficial: https://posit.co/download/rstudio-desktop/
+- Escolha a versão gratuita (*RStudio Desktop – Open Source License*).
+- Baixe a versão compatível com seu sistema operacional (Windows, macOS ou Linux).
+- Execute o instalador e siga os passos na tela.
+- Após a instalação, abra o RStudio para começar a programar e fazer suas análises de dados.
+
+
+
+
+
+
+
+
+
+
+:::: progress
+::: {.progress-bar style="width: 100%;"}
+:::
+::::
+

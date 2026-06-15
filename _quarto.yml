@@ -1,76 +1,71 @@
-# Preâmbulo Geral
 project:
   type: book
   output-dir: docs
 
 book:
-  title: "**Curso de Análise de Dados no R**"
-  subtitle: "**[Guia Prático - Parte I]**"
-  date: "today"
+  title: "Curso de Ciência de Dados no R"
+  subtitle: "[Guia Prático - Parte I]"
+  date: today
+  date-format: "DD/MM/YYYY"
   author:
     - name: Mário Diego Rocha Valente
-      url: mario.valente@detran.pa.gov.br
+      url: mailto:mario.valente@detran.pa.gov.br
       affiliation: FACTTOR/DETRAN-PA
-      affiliation_url: https://www.fatoranalytics.com/
-      orcid_id: 0000-0002-0559-5176
+      affiliation-url: https://www.fatoranalytics.com/
+      orcid: 0000-0002-0559-5176
     - name: Carlos Benedito Pereira da Paixão
-      url: carlos.paixao@gmail.com
+      url: mailto:carlos.paixao@gmail.com
       affiliation: FACTTOR
-      affiliation_url: https://www.fatoranalytics.com/
-      orcid_id: 0000-0003-3059-1967
-    - name: Fabio Costa
-      url: fabio.costa@gmail.com
+      affiliation-url: https://www.fatoranalytics.com/
+      orcid: 0000-0003-3059-1967
+    - name: Fabio Augusto da Silva Costa
+      url: mailto:fabio.costa@gmail.com
       affiliation: FACTTOR
-      affiliation_url: https://www.fatoranalytics.com/
-      orcid_id: 0000-0003-3059-1968
+      affiliation-url: https://www.fatoranalytics.com/
+      orcid: 0000-0003-3059-1968
   page-footer:
-    left: |
-      Was Written by (**VALENTE, M.D.R - 2026**).
-    right: |
-      FACTOR/DETRAN-PA.
+    left: "Written by **VALENTE, M.D.R - 2026**."
+    right: "FACTOR ANALYTICS."
   cover-image: Fator_Analytics.png
   favicon: Fator_Analytics.png
   repo-url: https://github.com/MarioDhiego
   repo-subdir: book
-  repo-branch: main                      # master
+  repo-branch: main
   repo-actions: [edit, issue, source]
   sharing: [twitter, linkedin]
   downloads: [pdf, docx]
-  page-navigation: TRUE
-  reader-mode: TRUE
+  page-navigation: true
+  reader-mode: true
   sidebar:
-        search: TRUE
-
+    search: true
   chapters:
     - index.qmd
+    - instalacao1.qmd
     - intro.qmd
     - cap1.qmd
     - cap2.qmd
     - cap3.qmd
+    - cap4.qmd
+    - cap5.qmd
     - summary.qmd
     - references.qmd
 
 bibliography: references.bib
+
 format:
   html:
-    toc: true                       # Indice OU Sumário
-    toc-title: SUMÁRIO              # Título do Indice
-    toc-location: right             # Posição do Indice
-    number-sections: TRUE           # Seção do Indice 
+    toc: true
+    toc-title: "SUMÁRIO"
+    toc-location: right
+    number-sections: true
     theme:
       light: cosmo
-      dark:  superhero
-    code-fold: TRUE
-    code-tools: FALSE
-    code-link: TRUE
+      dark: superhero
+    code-fold: true
+    code-tools: false
+    code-link: true
   pdf:
     documentclass: scrreport
+    pdf-engine: xelatex
   epub:
-    cover-image: cover.png
-abstract: ""
-
-
-
-
-
-
+    cover-image: Fator_Analytics.png
